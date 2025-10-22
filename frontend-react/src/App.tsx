@@ -18,11 +18,23 @@ import AppThemeProvider from '@/components/ThemeProvider'
 import ThemeSwitcher from '@/components/ThemeSwitcher'
 import LoadingScreen from '@/components/common/LoadingScreen'
 
+
+
+
 function App() {
   const [debugPanelOpen, setDebugPanelOpen] = useState(false)
   const [isAppReady, setIsAppReady] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+
+  
+  
+    
+    
+    
+    
+    
+  
 
   // 應用程式初始化檢查
   useEffect(() => {
@@ -51,6 +63,8 @@ function App() {
 
     initializeApp()
   }, [])
+
+  
 
   // 調試日誌：追蹤路由變化
   useEffect(() => {
@@ -110,7 +124,7 @@ function App() {
               </Button>
 
               {/* 主題切換按鈕 */}
-              <Box sx={{ marginLeft: 'auto' }}>
+              <Box sx={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
                 <ThemeSwitcher />
               </Box>
             </Toolbar>

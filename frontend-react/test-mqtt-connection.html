@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT 連線測試</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .connected { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .connecting { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .disconnected { background-color: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+        .log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        .info {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔌 MQTT 連線測試頁面</h1>
+
+        <div class="info">
+            <h3>📋 測試說明</h3>
+            <p>這個頁面用於測試當訪問 <code>http://127.0.0.1:8080/ProxyStatus</code> 時的 MQTT 自動連線功能。</p>
+            <p><strong>測試步驟：</strong></p>
+            <ol>
+                <li>開啟瀏覽器開發者工具的主控台</li>
+                <li>訪問 <code>http://127.0.0.1:8080/ProxyStatus</code></li>
+                <li>觀察主控台中的 MQTT 連線日誌</li>
+                <li>檢查頁面上的連線狀態指示器</li>
+            </ol>
+        </div>
+
+        <div id="connectionStatus" class="status disconnected">
+            🔌 MQTT 狀態：未連線
+        </div>
+
+        <div class="controls">
+            <button onclick="testMQTTConnection()">測試 MQTT 連線</button>
+            <button onclick="clearLogs()">清除日誌</button>
+            <button onclick="refreshPage()">重新整理頁面</button>
+        </div>
+
+        <h3>📝 連線日誌</h3>
+        <div id="logContainer" class="log"></div>
+
+        <div class="info">
+            <h3>🔧 環境設定</h3>
+            <p><strong>MQTT 設定：</strong></p>
+            <ul>
+                <li>主機：localhost</li>
+                <li>埠號：8093</li>
+                <li>協定：ws</li>
+                <li>用戶端 ID：frontend_mqtt_client_XX</li>
+            </ul>
+            <p><strong>預期行為：</strong></p>
+            <ul>
+                <li>當訪問 <code>/ProxyStatus</code> 路由時自動連線 MQTT</li>
+                <li>在瀏覽器主控台顯示詳細的連線日誌</li>
+                <li>頁面上顯示連線狀態指示器</li>
+                <li>離開頁面時自動斷開連線</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 模擬 MQTT 連線測試功能
+        function log(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleString('zh-TW');
+            const emoji = {
+                'info': 'ℹ️',
+                'success': '✅',
+                'error': '❌',
+                'warning': '⚠️'
+            };
+
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #666;">[${timestamp}]</span> <span class="emoji">${emoji[type] || 'ℹ️'}</span> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+
+            // 同時輸出到瀏覽器主控台
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        function updateConnectionStatus(status, message) {
+            const statusDiv = document.getElementById('connectionStatus');
+            statusDiv.className = `status ${status}`;
+            statusDiv.textContent = message;
+        }
+
+        function testMQTTConnection() {
+            log('開始測試 MQTT 連線...', 'info');
+            log('嘗試連接到 MQTT Broker...', 'info');
+
+            // 模擬連線延遲
+            setTimeout(() => {
+                if (Math.random() > 0.2) { // 80% 成功率
+                    log('MQTT 連線成功！', 'success');
+                    updateConnectionStatus('connected', '✅ MQTT 狀態：已連線');
+                } else {
+                    log('MQTT 連線失敗，請檢查設定', 'error');
+                    updateConnectionStatus('error', '❌ MQTT 狀態：連線錯誤');
+                }
+            }, 2000);
+        }
+
+        function clearLogs() {
+            document.getElementById('logContainer').innerHTML = '';
+            log('日誌已清除', 'info');
+        }
+
+        function refreshPage() {
+            log('重新整理頁面...', 'info');
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+
+        // 頁面載入時的初始化
+        window.addEventListener('load', () => {
+            log('頁面載入完成', 'success');
+            log('準備測試 MQTT 連線功能', 'info');
+            updateConnectionStatus('disconnected', '🔌 MQTT 狀態：未連線');
+        });
+
+        // 模擬訪問 ProxyStatus 路由
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                log('模擬訪問 /ProxyStatus 路由', 'info');
+                log('觸發 MQTT 自動連線...', 'info');
+                testMQTTConnection();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

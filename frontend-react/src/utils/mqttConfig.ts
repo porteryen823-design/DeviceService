@@ -2,7 +2,7 @@ import { MQTTConfig } from '@/types/mqtt'
 
 // 生成帶時間戳的客戶端ID
 function generateClientId(): string {
-  const baseClientId = import.meta.env.VITE_MQTT_CLIENT_ID || 'frontend_mqtt_client'
+  const baseClientId = (import.meta.env as any).VITE_MQTT_CLIENT_ID || 'frontend_mqtt_client'
 
   // 根據當前頁面決定客戶端類型
   let clientType = 'general'
@@ -26,24 +26,25 @@ function generateClientId(): string {
 
 // 從環境變數建立 MQTT 配置
 export function createMQTTConfig(): MQTTConfig {
+  const env = import.meta.env as any
   return {
-    host: import.meta.env.VITE_MQTT_HOST || 'localhost',
-    port: parseInt(import.meta.env.VITE_MQTT_PORT || '8093'),
-    protocol: (import.meta.env.VITE_MQTT_PROTOCOL as 'ws' | 'wss') || 'ws',
-    path: import.meta.env.VITE_MQTT_PATH || '/mqtt',
-    username: import.meta.env.VITE_MQTT_USERNAME || undefined,
-    password: import.meta.env.VITE_MQTT_PASSWORD || undefined,
+    host: env.VITE_MQTT_HOST || 'localhost',
+    port: parseInt(env.VITE_MQTT_PORT || '8093'),
+    protocol: (env.VITE_MQTT_PROTOCOL as 'ws' | 'wss') || 'ws',
+    path: env.VITE_MQTT_PATH || '/mqtt',
+    username: env.VITE_MQTT_USERNAME || undefined,
+    password: env.VITE_MQTT_PASSWORD || undefined,
     clientId: generateClientId(),
-    reconnectEnabled: import.meta.env.VITE_MQTT_RECONNECT_ENABLED === 'true',
-    reconnectMaxAttempts: parseInt(import.meta.env.VITE_MQTT_RECONNECT_MAX_ATTEMPTS || '5'),
-    reconnectDelay: parseInt(import.meta.env.VITE_MQTT_RECONNECT_DELAY || '3000'),
-    loggingEnabled: import.meta.env.VITE_MQTT_LOGGING_ENABLED === 'true'
+    reconnectEnabled: env.VITE_MQTT_RECONNECT_ENABLED === 'true',
+    reconnectMaxAttempts: parseInt(env.VITE_MQTT_RECONNECT_MAX_ATTEMPTS || '5'),
+    reconnectDelay: parseInt(env.VITE_MQTT_RECONNECT_DELAY || '3000'),
+    loggingEnabled: env.VITE_MQTT_LOGGING_ENABLED === 'true'
   }
 }
 
 // 檢查 MQTT 是否啟用
 export function isMQTTEnabled(): boolean {
-  return import.meta.env.VITE_MQTT_ENABLED === 'true'
+  return (import.meta.env as any).VITE_MQTT_ENABLED === 'true'
 }
 
 // 取得 MQTT 連線 URL

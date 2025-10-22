@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import deviceSlice from './slices/deviceSlice'
 import uiSlice from './slices/uiSlice'
+import mqttSlice from './slices/mqttSlice'
 
 export const store = configureStore({
   reducer: {
     device: deviceSlice,
     ui: uiSlice,
+    mqtt: mqttSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -13,7 +15,7 @@ export const store = configureStore({
         ignoredActions: ['persist/PERSIST'],
       },
     }),
-  devTools: import.meta.env.VITE_ENABLE_REDUX_DEVTOOLS === 'true',
+  devTools: (import.meta.env as any).VITE_ENABLE_REDUX_DEVTOOLS === 'true',
 })
 
 export type RootState = ReturnType<typeof store.getState>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import {
   Box,
   Typography,
@@ -24,6 +24,7 @@ import {
   FilterList as FilterIcon
 } from '@mui/icons-material'
 import { useProxyStatus } from '@/hooks/useProxyStatus'
+import { useMQTT } from '@/hooks/useMQTT'
 import ProxyStatusFilter from '@/components/ProxyStatusFilter'
 import ProxyStatusCard from '@/components/ProxyStatusCard'
 import ProxyStatusTableView from '@/components/ProxyStatusTableView'
@@ -40,7 +41,7 @@ const ProxyStatus: React.FC = () => {
   console.log('🔍 ProxyStatus: Current URL:', window.location.href)
   console.log('🔍 ProxyStatus: Current pathname:', window.location.pathname)
 
-    const {
+  const {
     data,
     allData,
     loading,
@@ -51,15 +52,18 @@ const ProxyStatus: React.FC = () => {
     summary,
     refetch,
     setFilter,
-    setSort,
-    // MQTT 相關資料
-    mqttStatus,
-    mqttLogs,
-    mqttCache,
-    isMQTTEnabled,
-    isMQTTConnected,
-    dataSourceStats
+    setSort
   } = useProxyStatus(autoRefresh ? autoRefreshInterval : 0)
+
+  // MQTT 連線
+  const {
+    isConnected: isMQTTConnected,
+    isConnecting: isMQTTConnecting,
+    connectionError: mqttConnectionError,
+    connect: connectMQTT,
+    disconnect: disconnectMQTT,
+    logs: mqttLogs
+  } = useMQTT(true) // 自動連線
 
   // 取得唯一的控制器類型列表
   const controllerTypes = useMemo(() => {
@@ -88,6 +92,14 @@ const ProxyStatus: React.FC = () => {
   const toggleAutoRefresh = () => {
     setAutoRefresh(!autoRefresh)
   }
+
+  // MQTT 連線清理
+  useEffect(() => {
+    return () => {
+      // 組件卸載時斷開 MQTT 連線
+      disconnectMQTT()
+    }
+  }, [disconnectMQTT])
 
   if (error && !loading) {
     return (
