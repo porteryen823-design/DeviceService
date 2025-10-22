@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "sqlite:///./device_service.db"
 
-    BACKGROUND_WORKER_INTERVAL: float = 0.2 # seconds
+    BACKGROUND_WORKER_INTERVAL: float = 5 # seconds
 
     # Controller API timeout in seconds
     CONTROLLER_API_TIMEOUT: float = 1.0
