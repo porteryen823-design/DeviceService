@@ -16,11 +16,41 @@ import Notification from '@/components/common/Notification'
 import ErrorBoundary from '@/components/common/ErrorBoundary'
 import AppThemeProvider from '@/components/ThemeProvider'
 import ThemeSwitcher from '@/components/ThemeSwitcher'
+import LoadingScreen from '@/components/common/LoadingScreen'
 
 function App() {
   const [debugPanelOpen, setDebugPanelOpen] = useState(false)
+  const [isAppReady, setIsAppReady] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+
+  // 應用程式初始化檢查
+  useEffect(() => {
+    const initializeApp = async () => {
+      console.log('🚀 App.tsx: 開始初始化應用程式...')
+
+      try {
+        // 模擬應用程式初始化過程
+        // 這裡可以添加各種初始化檢查：
+        // - 檢查 API 連線
+        // - 載入用戶設定
+        // - 初始化第三方服務
+        // - 載入快取資料
+
+        // 模擬載入時間（開發時可以調整為實際的初始化邏輯）
+        await new Promise(resolve => setTimeout(resolve, 2000))
+
+        console.log('✅ App.tsx: 應用程式初始化完成')
+        setIsAppReady(true)
+      } catch (error) {
+        console.error('❌ App.tsx: 應用程式初始化失敗:', error)
+        // 即使初始化失敗，我們也應該顯示應用程式
+        setIsAppReady(true)
+      }
+    }
+
+    initializeApp()
+  }, [])
 
   // 調試日誌：追蹤路由變化
   useEffect(() => {
@@ -122,6 +152,12 @@ function App() {
           <BugIcon />
         </Fab>
       </Box>
+
+      {/* 全螢幕載入畫面 */}
+      <LoadingScreen
+        open={!isAppReady}
+        message="正在初始化應用程式..."
+      />
     </AppThemeProvider>
     </ErrorBoundary>
   )
