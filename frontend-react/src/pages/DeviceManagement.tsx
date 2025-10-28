@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Typography, Paper, Alert, Box, Button, Snackbar } from '@mui/material'
 import { Add as AddIcon } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import { AppDispatch, RootState } from '@/store/store'
 import {
   fetchDevices,
@@ -18,6 +19,7 @@ import DeviceTable from '@/components/DeviceTable'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 
 const DeviceManagement: React.FC = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
   const { devices, loading, error } = useSelector((state: RootState) => state.device)
   const [refreshTrigger, setRefreshTrigger] = React.useState(0)
@@ -109,10 +111,10 @@ const DeviceManagement: React.FC = () => {
                   mb: 1,
                 }}
               >
-                設備服務管理系統
+                {t('devices.title')}
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                管理和監控您的設備服務狀態
+                {t('common.loading')}
               </Typography>
             </Box>
             <Button
@@ -121,7 +123,7 @@ const DeviceManagement: React.FC = () => {
               disabled={loading}
               sx={{ borderRadius: 2 }}
             >
-              重新載入資料
+              {t('common.refresh')}
             </Button>
           </Box>
         </Box>
@@ -163,10 +165,10 @@ const DeviceManagement: React.FC = () => {
             }}
           >
             <Typography variant="h6" color="text.secondary" gutterBottom>
-              沒有設備資料
+              {t('devices.noData')}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              目前沒有任何設備資料，請新增第一個設備。
+              {t('common.loading')}
             </Typography>
             <Button
               variant="contained"
@@ -178,7 +180,7 @@ const DeviceManagement: React.FC = () => {
                 background: 'linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)',
               }}
             >
-              新增設備
+              {t('devices.add')}
             </Button>
           </Box>
         ) : null}

@@ -22,6 +22,7 @@ import {
   ExpandLess as ExpandLessIcon,
   Search as SearchIcon
 } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import { ProxyStatusFilter as FilterType, ProxyStatusSort } from '@/types/proxyStatus'
 
 interface ProxyStatusFilterProps {
@@ -41,6 +42,7 @@ const ProxyStatusFilterComponent: React.FC<ProxyStatusFilterProps> = ({
   onClear,
   controllerTypes
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const [expanded, setExpanded] = React.useState(false)
 
@@ -69,11 +71,11 @@ const ProxyStatusFilterComponent: React.FC<ProxyStatusFilterProps> = ({
               endIcon={expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               size="small"
             >
-              篩選和搜尋
+              {t('common.filter')}
             </Button>
             {hasActiveFilters && (
               <Chip
-                label="已套用篩選"
+                label={t('common.filter')}
                 size="small"
                 color="primary"
                 sx={{ ml: 2 }}
@@ -88,7 +90,7 @@ const ProxyStatusFilterComponent: React.FC<ProxyStatusFilterProps> = ({
               size="small"
               variant="outlined"
             >
-              清除篩選
+              {t('common.filter')}
             </Button>
           )}
         </Box>
@@ -98,7 +100,7 @@ const ProxyStatusFilterComponent: React.FC<ProxyStatusFilterProps> = ({
             {/* 搜尋欄位 */}
             <TextField
               fullWidth
-              placeholder="搜尋 IP、備註、控制器類型或訊息..."
+              placeholder={t('common.search')}
               value={filter.search || ''}
               onChange={(e) => handleFilterChange('search', e.target.value)}
               InputProps={{
@@ -109,29 +111,29 @@ const ProxyStatusFilterComponent: React.FC<ProxyStatusFilterProps> = ({
 
             {/* 狀態篩選 */}
             <FormControl fullWidth size="small">
-              <InputLabel>狀態篩選</InputLabel>
+              <InputLabel>{t('proxy.status')}</InputLabel>
               <Select
                 value={filter.status || 'all'}
-                label="狀態篩選"
+                label={t('proxy.status')}
                 onChange={(e) => handleFilterChange('status', e.target.value)}
               >
-                <MenuItem value="all">全部狀態</MenuItem>
-                <MenuItem value="running">運行中</MenuItem>
-                <MenuItem value="stopped">已停止</MenuItem>
-                <MenuItem value="error">錯誤</MenuItem>
-                <MenuItem value="timeout">超時</MenuItem>
+                <MenuItem value="all">{t('common.loading')}</MenuItem>
+                <MenuItem value="running">{t('proxy.online')}</MenuItem>
+                <MenuItem value="stopped">{t('proxy.offline')}</MenuItem>
+                <MenuItem value="error">{t('proxy.error')}</MenuItem>
+                <MenuItem value="timeout">{t('common.loading')}</MenuItem>
               </Select>
             </FormControl>
 
             {/* 控制器類型篩選 */}
             <FormControl fullWidth size="small">
-              <InputLabel>控制器類型</InputLabel>
+              <InputLabel>{t('common.loading')}</InputLabel>
               <Select
                 value={filter.controllerType || ''}
-                label="控制器類型"
+                label={t('common.loading')}
                 onChange={(e) => handleFilterChange('controllerType', e.target.value)}
               >
-                <MenuItem value="">全部類型</MenuItem>
+                <MenuItem value="">{t('common.loading')}</MenuItem>
                 {controllerTypes.map((type) => (
                   <MenuItem key={type} value={type}>
                     {type}
@@ -143,14 +145,14 @@ const ProxyStatusFilterComponent: React.FC<ProxyStatusFilterProps> = ({
             {/* 排序選項 */}
             <Box>
               <Typography variant="body2" color="text.secondary" mb={1}>
-                排序方式
+                {t('common.loading')}
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap">
                 {[
-                  { key: 'proxyid', label: '代理 ID' },
-                  { key: 'message', label: '狀態訊息' },
-                  { key: 'controller_type', label: '控制器類型' },
-                  { key: 'proxy_ip', label: 'IP 位址' }
+                  { key: 'proxyid', label: t('common.loading') },
+                  { key: 'message', label: t('proxy.status') },
+                  { key: 'controller_type', label: t('common.loading') },
+                  { key: 'proxy_ip', label: t('common.loading') }
                 ].map((option) => (
                   <Chip
                     key={option.key}

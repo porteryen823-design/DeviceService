@@ -23,6 +23,7 @@ import {
   AutoAwesome as AutoRefreshIcon,
   FilterList as FilterIcon
 } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import { useProxyStatus } from '@/hooks/useProxyStatus'
 import { useMQTT } from '@/hooks/useMQTT'
 import ProxyStatusFilter from '@/components/ProxyStatusFilter'
@@ -31,6 +32,7 @@ import ProxyStatusTableView from '@/components/ProxyStatusTableView'
 import { ProxyStatusData } from '@/types/proxyStatus'
 
 const ProxyStatus: React.FC = () => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('cards')
   const [autoRefresh, setAutoRefresh] = useState<boolean>(false)
@@ -129,7 +131,7 @@ const ProxyStatus: React.FC = () => {
       {/* 頁面標題和控制列 */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4" component="h1">
-          代理服務狀態監控
+          {t('proxy.title')}
         </Typography>
 
         <Box display="flex" alignItems="center" gap={2}>
@@ -144,7 +146,7 @@ const ProxyStatus: React.FC = () => {
             }
             label={
               <Typography variant="body2">
-                自動重新整理 ({autoRefreshInterval}s)
+                {t('common.refresh')} ({autoRefreshInterval}s)
               </Typography>
             }
           />
@@ -152,7 +154,7 @@ const ProxyStatus: React.FC = () => {
           {/* 資料統計 */}
           <Box display="flex" alignItems="center" gap={1}>
             <Typography variant="body2" color="text.secondary">
-              總計: {data.length}
+              {t('common.loading')}: {data.length}
             </Typography>
           </Box>
 
@@ -163,7 +165,7 @@ const ProxyStatus: React.FC = () => {
             onClick={handleRefresh}
             disabled={loading}
           >
-            重新整理
+            {t('common.refresh')}
           </Button>
         </Box>
       </Box>
@@ -171,7 +173,7 @@ const ProxyStatus: React.FC = () => {
       {/* 最後更新時間 */}
       {lastUpdated && (
         <Typography variant="body2" color="text.secondary" mb={2}>
-          最後更新時間: {lastUpdated.toLocaleString('zh-TW')}
+          {t('common.loading')}: {lastUpdated.toLocaleString('zh-TW')}
         </Typography>
       )}
 
@@ -190,7 +192,7 @@ const ProxyStatus: React.FC = () => {
       {/* 檢視模式切換和結果統計 */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="body2" color="text.secondary">
-          顯示 {data.length} 項結果
+          {t('common.loading')} {data.length} {t('common.loading')}
         </Typography>
 
         <Box display="flex" alignItems="center" gap={1}>
@@ -223,7 +225,7 @@ const ProxyStatus: React.FC = () => {
         >
           <RefreshIcon sx={{ animation: 'spin 1s linear infinite', mr: 2 }} />
           <Typography variant="h6">
-            載入代理狀態中...
+            {t('proxy.refreshing')}
           </Typography>
         </Box>
       )}
@@ -246,10 +248,10 @@ const ProxyStatus: React.FC = () => {
             >
               <FilterIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
               <Typography variant="h6" color="text.secondary">
-                沒有符合條件的代理服務資料
+                {t('common.loading')}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                請調整篩選條件或重新整理資料
+                {t('common.loading')}
               </Typography>
             </Box>
           ) : viewMode === 'cards' ? (

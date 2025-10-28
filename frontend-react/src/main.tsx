@@ -8,6 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import App from './App.tsx'
 import { store } from './store/store.ts'
 import theme from './styles/theme.ts'
+import './i18n'
 
 import './styles/index.css'
 

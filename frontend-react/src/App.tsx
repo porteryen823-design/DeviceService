@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { Box, Fab, AppBar, Toolbar, Button, Typography } from '@mui/material'
 import { BugReport as BugIcon, Devices as DevicesIcon, MonitorHeart as MonitorIcon } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 
 // 調試日誌：追蹤路由行為
 console.log('🔍 App.tsx: Component loaded')
@@ -16,12 +17,14 @@ import Notification from '@/components/common/Notification'
 import ErrorBoundary from '@/components/common/ErrorBoundary'
 import AppThemeProvider from '@/components/ThemeProvider'
 import ThemeSwitcher from '@/components/ThemeSwitcher'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 import LoadingScreen from '@/components/common/LoadingScreen'
 
 
 
 
 function App() {
+  const { t } = useTranslation()
   const [debugPanelOpen, setDebugPanelOpen] = useState(false)
   const [isAppReady, setIsAppReady] = useState(false)
   const navigate = useNavigate()
@@ -104,7 +107,7 @@ function App() {
           <AppBar position="static" elevation={1}>
             <Toolbar>
               <Typography variant="h6" component="div" sx={{ mr: 4 }}>
-                Device Service Management
+                {t('app.title')}
               </Typography>
               <Button
                 color={isActiveRoute('/') || isActiveRoute('/devices') ? 'secondary' : 'inherit'}
@@ -112,7 +115,7 @@ function App() {
                 onClick={() => navigate('/devices')}
                 sx={{ mr: 2 }}
               >
-                設備管理
+                {t('nav.devices')}
               </Button>
               <Button
                 color={isActiveRoute('/ProxyStatus') ? 'secondary' : 'inherit'}
@@ -120,11 +123,12 @@ function App() {
                 onClick={() => navigate('/ProxyStatus')}
                 sx={{ mr: 2 }}
               >
-                代理狀態監控
+                {t('nav.proxyStatus')}
               </Button>
 
-              {/* 主題切換按鈕 */}
-              <Box sx={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
+              {/* 主題切換和語言切換按鈕 */}
+              <Box sx={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 2 }}>
+                <LanguageSwitcher />
                 <ThemeSwitcher />
               </Box>
             </Toolbar>
