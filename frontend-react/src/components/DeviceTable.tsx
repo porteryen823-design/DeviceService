@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Table,
   TableBody,
@@ -49,6 +50,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
   onToggleEnable,
   onCreate,
 }) => {
+  const { t } = useTranslation()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null)
 
@@ -103,7 +105,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
   const getStatusChip = (enable: number) => {
     return enable === 1 ? (
       <Chip
-        label="啟用"
+        label={t('devices.enabled')}
         color="success"
         size="small"
         icon={<EnableIcon />}
@@ -111,7 +113,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
       />
     ) : (
       <Chip
-        label="停用"
+        label={t('devices.disabled')}
         color="default"
         size="small"
         icon={<DisableIcon />}
@@ -129,7 +131,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
     <>
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h6">
-          設備列表 ({devices.length} 項)
+          {t('devices.title')} ({devices.length} {t('common.items', '項')})
         </Typography>
         {onCreate && (
           <Button
@@ -142,7 +144,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
               background: 'linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)',
             }}
           >
-            新增設備
+            {t('devices.add')}
           </Button>
         )}
       </Box>
@@ -158,18 +160,18 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
         <Table>
           <TableHead sx={{ bgcolor: 'grey.50' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>代理 ID</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>代理 IP</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>代理端口</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>控制器類型</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>控制器 IP</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>控制器端口</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>狀態</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>創建用戶</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>創建時間</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>備註</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.proxyId')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.proxyIp')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.proxyPort')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.controllerType')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.controllerIp')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.controllerPort')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.status')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.createUser')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.createTime')}</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>{t('devices.remark')}</TableCell>
               <TableCell sx={{ fontWeight: 600, color: 'text.primary' }} align="center">
-                操作
+                {t('devices.actions')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -236,7 +238,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'center' }}>
                     {onToggleEnable && (
-                      <Tooltip title={device.enable === 1 ? '停用設備' : '啟用設備'}>
+                      <Tooltip title={device.enable === 1 ? t('devices.disableDevice') : t('devices.enableDevice')}>
                         <IconButton
                           size="small"
                           onClick={() => handleToggleEnable(device)}
@@ -247,7 +249,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
                       </Tooltip>
                     )}
                     {onEdit && (
-                      <Tooltip title="編輯設備">
+                      <Tooltip title={t('devices.editDevice')}>
                         <IconButton
                           size="small"
                           onClick={() => {
@@ -265,7 +267,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
                       </Tooltip>
                     )}
                     {onDelete && (
-                      <Tooltip title="刪除設備">
+                      <Tooltip title={t('devices.deleteDevice')}>
                         <IconButton
                           size="small"
                           onClick={() => handleDeleteClick(device)}
@@ -291,24 +293,26 @@ const DeviceTable: React.FC<DeviceTableProps> = ({
         fullWidth
       >
         <DialogTitle sx={{ color: 'error.main' }}>
-          確認刪除設備
+          {t('devices.confirmDelete')}
         </DialogTitle>
         <DialogContent>
           <Typography>
-            確定要刪除設備 "{selectedDevice?.proxy_ip}:{selectedDevice?.proxy_port}" 嗎？
-            此操作無法復原。
+            {t('devices.deleteConfirmMessage', {
+              ip: selectedDevice?.proxy_ip,
+              port: selectedDevice?.proxy_port
+            })}
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialogOpen(false)}>
-            取消
+            {t('common.cancel')}
           </Button>
           <Button
             onClick={handleDeleteConfirm}
             variant="contained"
             color="error"
           >
-            確認刪除
+            {t('common.confirm')}
           </Button>
         </DialogActions>
       </Dialog>

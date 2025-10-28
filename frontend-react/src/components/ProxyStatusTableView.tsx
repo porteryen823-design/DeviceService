@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Table,
   TableBody,
@@ -32,6 +33,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
   data,
   onRefresh
 }) => {
+  const { t } = useTranslation()
   const getStatusType = (message: string, proxyServiceAlive: string, proxyServiceStart: string): ProxyStatusType => {
     const isAlive = proxyServiceAlive === '1'
     const isStarted = proxyServiceStart === '1'
@@ -57,7 +59,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
         return (
           <Chip
             icon={<CheckCircleIcon />}
-            label="運行中"
+            label={t('proxy.running')}
             color="success"
             size="small"
           />
@@ -66,7 +68,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
         return (
           <Chip
             icon={<ErrorIcon />}
-            label="錯誤"
+            label={t('proxy.error')}
             color="error"
             size="small"
           />
@@ -75,7 +77,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
         return (
           <Chip
             icon={<WarningIcon />}
-            label="超時"
+            label={t('proxy.timeout')}
             color="warning"
             size="small"
           />
@@ -84,7 +86,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
         return (
           <Chip
             icon={<StopIcon />}
-            label="已停止"
+            label={t('proxy.stopped')}
             color="default"
             size="small"
           />
@@ -93,7 +95,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
         return (
           <Chip
             icon={<HelpIcon />}
-            label="未知"
+            label={t('proxy.unknown')}
             color="info"
             size="small"
           />
@@ -117,16 +119,16 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>代理 ID</TableCell>
-            <TableCell>狀態</TableCell>
-            <TableCell>訊息</TableCell>
-            <TableCell>服務運行</TableCell>
-            <TableCell>服務啟動</TableCell>
-            <TableCell>控制器類型</TableCell>
-            <TableCell>IP 位址</TableCell>
-            <TableCell>連接埠</TableCell>
-            <TableCell>備註</TableCell>
-            <TableCell align="center">操作</TableCell>
+            <TableCell>{t('proxy.proxyId')}</TableCell>
+            <TableCell>{t('proxy.status')}</TableCell>
+            <TableCell>{t('proxy.message')}</TableCell>
+            <TableCell>{t('proxy.serviceRunning')}</TableCell>
+            <TableCell>{t('proxy.serviceStarted')}</TableCell>
+            <TableCell>{t('proxy.controllerType')}</TableCell>
+            <TableCell>{t('proxy.ipAddress')}</TableCell>
+            <TableCell>{t('proxy.port')}</TableCell>
+            <TableCell>{t('proxy.remark')}</TableCell>
+            <TableCell align="center">{t('proxy.actions')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -155,7 +157,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
                     }}
                   />
                   <Typography variant="body2">
-                    {status.proxyServiceAlive === '1' ? '運行中' : '未運行'}
+                    {status.proxyServiceAlive === '1' ? t('proxy.serviceAlive') : t('proxy.serviceNotAlive')}
                   </Typography>
                 </Box>
               </TableCell>
@@ -171,7 +173,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
                     }}
                   />
                   <Typography variant="body2">
-                    {status.proxyServiceStart === '1' ? '已啟動' : '未啟動'}
+                    {status.proxyServiceStart === '1' ? t('proxy.serviceStarted') : t('proxy.serviceNotStarted')}
                   </Typography>
                 </Box>
               </TableCell>
@@ -197,7 +199,7 @@ const ProxyStatusTableView: React.FC<ProxyStatusTableViewProps> = ({
               </TableCell>
               <TableCell align="center">
                 {onRefresh && (
-                  <Tooltip title="重新整理此項目">
+                  <Tooltip title={t('proxy.refreshItem')}>
                     <IconButton
                       size="small"
                       onClick={(e) => {
