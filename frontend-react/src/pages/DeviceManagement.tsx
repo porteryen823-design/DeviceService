@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Typography, Paper, Alert, Box, Button, Snackbar } from '@mui/material'
+import { Add as AddIcon } from '@mui/icons-material'
 import { AppDispatch, RootState } from '@/store/store'
 import {
   fetchDevices,
@@ -169,7 +170,7 @@ const DeviceManagement: React.FC = () => {
             </Typography>
             <Button
               variant="contained"
-              startIcon={<Button>新增設備</Button>}
+              startIcon={<AddIcon />}
               onClick={handleCreate}
               sx={{
                 borderRadius: 2,

@@ -190,7 +190,7 @@ export class MQTTService {
         return
       }
 
-      this.client.subscribe(topic, { qos }, (error) => {
+      this.client.subscribe(topic, { qos: qos as 0 | 1 | 2 }, (error) => {
         if (error) {
           this.log('error', `訂閱主題失敗: ${topic}`, error)
           reject(error)
@@ -232,7 +232,7 @@ export class MQTTService {
         return
       }
 
-      this.client.publish(topic, message, { qos, retain }, (error) => {
+      this.client.publish(topic, message, { qos: qos as 0 | 1 | 2, retain }, (error) => {
         if (error) {
           this.log('error', `發送訊息失敗: ${topic}`, error)
           reject(error)
@@ -283,7 +283,7 @@ export class MQTTService {
   }
 
   // 處理狀態訊息
-  private handleStatusMessage(topic: string, payload: string): void {
+  private handleStatusMessage(_topic: string, payload: string): void {
     try {
       const statusData: MQTTStatusMessage = JSON.parse(payload)
       console.log('收到代理服務狀態更新:', statusData)

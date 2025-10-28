@@ -11,18 +11,21 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 logger.debug("嘗試從 app.config 載入 settings...")
 
+logger.debug("Attempting to load settings from app.config...")
+
 try:
     from .config_mqtt import settings
-    logger.debug("成功載入 settings 物件")
+    logger.debug("Successfully loaded settings object")
 except ImportError as e:
-    logger.error(f"無法從 app.config 載入 settings: {e}")
-    logger.debug("嘗試從 app.config_mqtt 載入 settings...")
+    logger.error(f"Failed to load settings from app.config: {e}")
+    logger.debug("Attempting to load settings from app.config_mqtt...")
     try:
         from .config_mqtt import settings
-        logger.debug("成功從 app.config_mqtt 載入 settings 物件")
+        logger.debug("Successfully loaded settings object from app.config_mqtt")
     except ImportError as e2:
-        logger.error(f"無法從 app.config_mqtt 載入 settings: {e2}")
+        logger.error(f"Failed to load settings from app.config_mqtt: {e2}")
         raise e2
+    
 from .database import engine, Base, get_db
 from .models.device import Device
 from .services.background_worker import BackgroundWorker
@@ -52,7 +55,7 @@ async def lifespan(app: FastAPI):
 
     # 防止重複啟動
     if _app_started:
-        logger.warning("應用程式已經啟動，跳過重複啟動")
+        logger.warning("Application is already running, skipping duplicate startup.")
         yield
         return
 
@@ -64,18 +67,18 @@ async def lifespan(app: FastAPI):
 
     # 啟動MQTT客戶端
     try:
-        logger.info(f"啟動MQTT客戶端，連接到 {settings.MQTT_BROKER_HOST}:{settings.MQTT_BROKER_PORT}")
+        logger.info(f"Starting MQTT client, connecting to {settings.MQTT_BROKER_HOST}:{settings.MQTT_BROKER_PORT}")
         mqtt_connected = await mqtt_client.connect()
         if mqtt_connected:
-            logger.info("MQTT客戶端連接成功")
+            logger.info("MQTT client connected successfully")
 
             # 啟動MQTT訊息監聽
             await mqtt_handler.start_listening()
-            logger.info("MQTT訊息監聽已啟動")
+            logger.info("MQTT message listener started")
         else:
-            logger.error("MQTT客戶端連接失敗")
+            logger.error("MQTT client connection failed")
     except Exception as e:
-        logger.error(f"啟動MQTT客戶端時發生錯誤: {e}")
+        logger.error(f"Error occurred while starting MQTT client: {e}")
 
     # 建立資料庫表格
     try:
@@ -102,9 +105,9 @@ async def lifespan(app: FastAPI):
     # 關閉MQTT客戶端
     try:
         await mqtt_client.disconnect()
-        logger.info("MQTT客戶端已關閉")
+        logger.info("MQTT client has been shut down")
     except Exception as e:
-        logger.error(f"關閉MQTT客戶端時發生錯誤: {e}")
+        logger.error(f"Error occurred while shutting down MQTT client: {e}")
 
     logger.info("Device Service shutdown complete")
 

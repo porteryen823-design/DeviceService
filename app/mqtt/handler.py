@@ -16,13 +16,13 @@ class MQTTMessageHandler:
     def register_handler(self, topic: str, handler: Callable):
         """註冊主題處理器"""
         self._handlers[topic] = handler
-        logger.info(f"註冊MQTT主題處理器: {topic}")
+        logger.info(f"Registered MQTT topic handler: {topic}")
 
     def unregister_handler(self, topic: str):
         """取消註冊主題處理器"""
         if topic in self._handlers:
             del self._handlers[topic]
-            logger.info(f"取消註冊MQTT主題處理器: {topic}")
+            logger.info(f"Unregistered MQTT topic handler: {topic}")
 
     async def start_listening(self):
         """開始監聽訊息"""
@@ -46,26 +46,26 @@ class MQTTMessageHandler:
             # 解析JSON payload
             data = json.loads(payload)
 
-            logger.info(f"[MQTT_HANDLER] 收到MQTT訊息 - 主題: {topic}, 資料大小: {len(payload)} bytes")
-            logger.debug(f"[MQTT_HANDLER] 訊息內容: {data}")
+            logger.info(f"[MQTT_HANDLER] Received MQTT message - Topic: {topic}, Payload size: {len(payload)} bytes")
+            logger.debug(f"[MQTT_HANDLER] Message content: {data}")
 
             # 根據主題類型進行處理
             if "ProxyService/status" in topic:
-                logger.info(f"[MQTT_HANDLER] 處理代理服務狀態訊息 - 主題: {topic}")
+                logger.info(f"[MQTT_HANDLER] Handling proxy service status message - Topic: {topic}")
                 asyncio.create_task(self._handle_proxy_status_message(topic, data))
             elif "DeviceService/status" in topic:
-                logger.info(f"[MQTT_HANDLER] 處理設備服務狀態訊息 - 主題: {topic}")
+                logger.info(f"[MQTT_HANDLER] Handling device service status message - Topic: {topic}")
                 asyncio.create_task(self._handle_device_status_message(topic, data))
             elif "deviceService" in topic:
-                logger.info(f"[MQTT_HANDLER] 處理設備服務事件訊息 - 主題: {topic}")
+                logger.info(f"[MQTT_HANDLER] Handling device service event message - Topic: {topic}")
                 asyncio.create_task(self._handle_device_service_message(topic, data))
             else:
-                logger.warning(f"[MQTT_HANDLER] 未識別的主題類型 - 主題: {topic}")
+                logger.warning(f"[MQTT_HANDLER] Unrecognized topic type - Topic: {topic}")
 
         except json.JSONDecodeError as e:
-            logger.error(f"[MQTT_HANDLER] 解析MQTT訊息JSON失敗 - 主題: {topic}, 錯誤: {e}")
+            logger.error(f"[MQTT_HANDLER] Failed to parse MQTT message JSON - Topic: {topic}, Error: {e}")
         except Exception as e:
-            logger.error(f"[MQTT_HANDLER] 處理MQTT訊息時發生錯誤 - 主題: {topic}, 錯誤: {e}")
+            logger.error(f"[MQTT_HANDLER] Error occurred while handling MQTT message - Topic: {topic}, Error: {e}")
 
     async def _handle_proxy_status_message(self, topic: str, data: Dict[str, Any]):
         """處理代理服務狀態訊息"""
@@ -74,13 +74,13 @@ class MQTTMessageHandler:
             status = data.get("status")
             message = data.get("message")
 
-            logger.info(f"處理代理服務狀態更新 - ProxyID: {proxyid}, 狀態: {status}, 訊息: {message}")
+            logger.info(f"Handling proxy service status update - ProxyID: {proxyid}, Status: {status}, Message: {message}")
 
             # 這裡可以加入業務邏輯處理
             # 例如：更新資料庫中的狀態、觸發其他服務等
 
         except Exception as e:
-            logger.error(f"處理代理服務狀態訊息時發生錯誤: {e}")
+            logger.error(f"Error occurred while handling proxy service status message: {e}")
 
     async def _handle_device_status_message(self, topic: str, data: Dict[str, Any]):
         """處理設備服務狀態訊息"""
@@ -89,13 +89,13 @@ class MQTTMessageHandler:
             status = data.get("status")
             device_info = data.get("device_info", {})
 
-            logger.info(f"處理設備服務狀態更新 - ProxyID: {proxyid}, 狀態: {status}")
+            logger.info(f"Handling device service status update - ProxyID: {proxyid}, Status: {status}")
 
             # 這裡可以加入業務邏輯處理
             # 例如：更新設備狀態、記錄設備資訊等
 
         except Exception as e:
-            logger.error(f"處理設備服務狀態訊息時發生錯誤: {e}")
+            logger.error(f"Error occurred while handling device service status message: {e}")
 
     async def _handle_device_service_message(self, topic: str, data: Dict[str, Any]):
         """處理設備服務事件訊息"""
@@ -104,7 +104,7 @@ class MQTTMessageHandler:
             proxyid = data.get("proxyid")
             status = data.get("status")
 
-            logger.info(f"處理設備服務事件 - 類型: {event_type}, ProxyID: {proxyid}, 狀態: {status}")
+            logger.info(f"Handling device service event - Type: {event_type}, ProxyID: {proxyid}, Status: {status}")
 
             # 根據事件類型進行處理
             if event_type == "start":
@@ -113,12 +113,12 @@ class MQTTMessageHandler:
                 await self._handle_device_stop_event(data)
 
         except Exception as e:
-            logger.error(f"處理設備服務事件訊息時發生錯誤: {e}")
+            logger.error(f"Error occurred while handling device service event message: {e}")
 
     async def _handle_device_start_event(self, data: Dict[str, Any]):
         """處理設備啟動事件"""
         proxyid = data.get("proxyid")
-        logger.info(f"設備服務啟動事件 - ProxyID: {proxyid}")
+        logger.info(f"Device service start event - ProxyID: {proxyid}")
 
         # 這裡可以加入啟動後的處理邏輯
         # 例如：記錄啟動時間、更新狀態等
@@ -126,7 +126,7 @@ class MQTTMessageHandler:
     async def _handle_device_stop_event(self, data: Dict[str, Any]):
         """處理設備停止事件"""
         proxyid = data.get("proxyid")
-        logger.info(f"設備服務停止事件 - ProxyID: {proxyid}")
+        logger.info(f"Device service stop event - ProxyID: {proxyid}")
 
         # 這裡可以加入停止後的處理邏輯
         # 例如：記錄停止時間、清理資源等

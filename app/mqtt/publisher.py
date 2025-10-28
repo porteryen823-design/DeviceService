@@ -34,7 +34,7 @@ class MQTTEventPublisher:
 
         # 記錄詳細的 MQTT 發佈資訊到 MQTT 專用日誌
         mqtt_logger = logging.getLogger('mqtt')
-        mqtt_logger.info(f"[MQTT_PUBLISH] 設備服務啟動 - ProxyID: {proxyid}, Status: {status}")
+        mqtt_logger.info(f"[MQTT_PUBLISH] Device service starts - ProxyID: {proxyid}, Status: {status}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Topic: {topic}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Payload: {payload}")
 
@@ -44,10 +44,10 @@ class MQTTEventPublisher:
         # 記錄發佈結果
         if result:
             logger.info(f"[MQTT_PUBLISH] Successfully published device service start to topic: {topic}")
-            mqtt_logger.info(f"[MQTT_PUBLISH] 發佈成功 - 主題: {topic}")
+            mqtt_logger.info(f"[MQTT_PUBLISH] Published successfully - Topic: {topic}")
         else:
             logger.error(f"[MQTT_PUBLISH] Failed to publish device service start to topic: {topic}")
-            mqtt_logger.error(f"[MQTT_PUBLISH] 發佈失敗 - 主題: {topic}")
+            mqtt_logger.error(f"[MQTT_PUBLISH] Publishing failed - Topic: {topic}")
 
         return result
 
@@ -68,7 +68,7 @@ class MQTTEventPublisher:
 
         # 記錄詳細的 MQTT 發佈資訊到 MQTT 專用日誌
         mqtt_logger = logging.getLogger('mqtt')
-        mqtt_logger.info(f"[MQTT_PUBLISH] 代理服務狀態 - ProxyID: {proxyid}, Status: {status}")
+        mqtt_logger.info(f"[MQTT_PUBLISH] Agent service status - ProxyID: {proxyid}, Status: {status}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Topic: {topic}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Payload: {payload}")
 
@@ -94,7 +94,7 @@ class MQTTEventPublisher:
 
         # 記錄詳細的 MQTT 發佈資訊到 MQTT 專用日誌
         mqtt_logger = logging.getLogger('mqtt')
-        mqtt_logger.info(f"[MQTT_PUBLISH] 代理狀態更新 - ProxyID: {proxyid}, Status: {status}")
+        mqtt_logger.info(f"[MQTT_PUBLISH] Agent status update - ProxyID: {proxyid}, Status: {status}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Topic: {topic}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Payload: {payload}")
 
@@ -104,10 +104,10 @@ class MQTTEventPublisher:
         # 記錄發佈結果
         if result:
             logger.info(f"[MQTT_PUBLISH] Successfully published to topic: {topic}")
-            mqtt_logger.info(f"[MQTT_PUBLISH] 發佈成功 - 主題: {topic}")
+            mqtt_logger.info(f"[MQTT_PUBLISH] Published successfully - Topic: {topic}")
         else:
             logger.error(f"[MQTT_PUBLISH] Failed to publish to topic: {topic}")
-            mqtt_logger.error(f"[MQTT_PUBLISH] 發佈失敗 - 主題: {topic}")
+            mqtt_logger.error(f"[MQTT_PUBLISH] Publishing failed - Topic: {topic}")
 
         return result
 
@@ -125,7 +125,7 @@ class MQTTEventPublisher:
 
         # 記錄詳細的 MQTT 發佈資訊到 MQTT 專用日誌
         mqtt_logger = logging.getLogger('mqtt')
-        mqtt_logger.info(f"[MQTT_PUBLISH] 設備狀態更新 - ProxyID: {proxyid}, Status: {status}")
+        mqtt_logger.info(f"[MQTT_PUBLISH] Device status updates - ProxyID: {proxyid}, Status: {status}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Topic: {topic}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Payload: {payload}")
 
@@ -160,7 +160,7 @@ class MQTTEventPublisher:
 
         # 記錄詳細的 MQTT 發佈資訊到 MQTT 專用日誌
         mqtt_logger = logging.getLogger('mqtt')
-        mqtt_logger.info(f"[MQTT_PUBLISH] 健康檢查結果 - ProxyID: {proxyid}, 健康狀態: {healthy}")
+        mqtt_logger.info(f"[MQTT_PUBLISH] Health check results - ProxyID: {proxyid}, health status: {healthy}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Payload: {payload}")
 
         return self.publish_proxy_status_update(proxyid, status, **payload)
@@ -191,7 +191,7 @@ class MQTTEventPublisher:
 
         # 記錄詳細的 MQTT 發佈資訊到 MQTT 專用日誌
         mqtt_logger = logging.getLogger('mqtt')
-        mqtt_logger.info(f"[MQTT_PUBLISH] Controller啟動結果 - ProxyID: {proxyid}, 成功: {success}")
+        mqtt_logger.info(f"[MQTT_PUBLISH] Controller startup result - ProxyID: {proxyid}, success: {success}")
         mqtt_logger.info(f"[MQTT_PUBLISH] Payload: {payload}")
 
         return self.publish_proxy_status_update(proxyid, status, **payload)
@@ -212,7 +212,7 @@ class MQTTEventPublisher:
 
         # 記錄詳細的 MQTT 發佈資訊到 MQTT 專用日誌
         mqtt_logger = logging.getLogger('mqtt')
-        mqtt_logger.warning(f"[MQTT_PUBLISH] 超時事件 - ProxyID: {proxyid}, 類型: {timeout_type}")
+        mqtt_logger.warning(f"[MQTT_PUBLISH] timeout event - ProxyID: {proxyid}, Type: {timeout_type}")
         mqtt_logger.warning(f"[MQTT_PUBLISH] Payload: {payload}")
 
         return self.publish_proxy_status_update(
@@ -240,7 +240,7 @@ class MQTTEventPublisher:
 
         # 記錄詳細的 MQTT 發佈資訊到 MQTT 專用日誌
         mqtt_logger = logging.getLogger('mqtt')
-        mqtt_logger.error(f"[MQTT_PUBLISH] 連接錯誤 - ProxyID: {proxyid}, 錯誤訊息: {error_message}")
+        mqtt_logger.error(f"[MQTT_PUBLISH] connection error - ProxyID: {proxyid}, error message: {error_message}")
         mqtt_logger.error(f"[MQTT_PUBLISH] Payload: {payload}")
 
         return self.publish_proxy_status_update(
