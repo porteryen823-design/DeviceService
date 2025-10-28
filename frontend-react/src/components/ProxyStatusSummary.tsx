@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Box,
   Card,
@@ -28,6 +29,7 @@ const ProxyStatusSummaryComponent: React.FC<ProxyStatusSummaryProps> = ({
   summary,
   loading = false
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme()
 
   const getStatusIcon = (status: string) => {
@@ -62,31 +64,31 @@ const ProxyStatusSummaryComponent: React.FC<ProxyStatusSummaryProps> = ({
 
   const statistics: StatusStatistics[] = [
     {
-      label: '運行中',
+      label: t('proxy.running'),
       value: summary.running,
       color: theme.palette.success.main,
       percentage: summary.total > 0 ? (summary.running / summary.total) * 100 : 0
     },
     {
-      label: '已停止',
+      label: t('proxy.stopped'),
       value: summary.stopped,
       color: theme.palette.grey[500],
       percentage: summary.total > 0 ? (summary.stopped / summary.total) * 100 : 0
     },
     {
-      label: '錯誤',
+      label: t('proxy.error'),
       value: summary.error,
       color: theme.palette.error.main,
       percentage: summary.total > 0 ? (summary.error / summary.total) * 100 : 0
     },
     {
-      label: '超時',
+      label: t('proxy.timeout'),
       value: summary.timeout,
       color: theme.palette.warning.main,
       percentage: summary.total > 0 ? (summary.timeout / summary.total) * 100 : 0
     },
     {
-      label: '未知',
+      label: t('proxy.unknown'),
       value: summary.unknown,
       color: theme.palette.info.main,
       percentage: summary.total > 0 ? (summary.unknown / summary.total) * 100 : 0
@@ -99,7 +101,7 @@ const ProxyStatusSummaryComponent: React.FC<ProxyStatusSummaryProps> = ({
         <CardContent>
           <Box display="flex" alignItems="center" mb={2}>
             <TrendingUpIcon sx={{ mr: 1 }} />
-            <Typography variant="h6">狀態統計</Typography>
+            <Typography variant="h6">{t('proxy.status')}統計</Typography>
           </Box>
           <LinearProgress />
         </CardContent>
@@ -112,9 +114,9 @@ const ProxyStatusSummaryComponent: React.FC<ProxyStatusSummaryProps> = ({
       <CardContent>
         <Box display="flex" alignItems="center" mb={3}>
           <TrendingUpIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
-          <Typography variant="h6">狀態統計</Typography>
+          <Typography variant="h6">{t('proxy.status')}統計</Typography>
           <Chip
-            label={`總計: ${summary.total}`}
+            label={`${t('common.total')}: ${summary.total}`}
             size="small"
             sx={{ ml: 2 }}
             color="primary"

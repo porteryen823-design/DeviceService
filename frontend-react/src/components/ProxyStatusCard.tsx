@@ -20,6 +20,7 @@ import {
   Info as InfoIcon,
   Router as RouterIcon
 } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import { ProxyStatusData, ProxyStatusType } from '@/types/proxyStatus'
 
 interface ProxyStatusCardProps {
@@ -34,6 +35,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
   compact = false
 }) => {
   const theme = useTheme()
+  const { t } = useTranslation()
 
   const getStatusType = (message: string, proxyServiceAlive: string, proxyServiceStart: string): ProxyStatusType => {
     const isAlive = proxyServiceAlive === '1'
@@ -57,7 +59,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
       case 'running':
         return {
           icon: <CheckCircleIcon />,
-          label: '運行中',
+          label: t('proxy.running'),
           color: 'success' as const,
           bgColor: theme.palette.success.main,
           textColor: theme.palette.success.contrastText
@@ -65,7 +67,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
       case 'error':
         return {
           icon: <ErrorIcon />,
-          label: '錯誤',
+          label: t('proxy.error'),
           color: 'error' as const,
           bgColor: theme.palette.error.main,
           textColor: theme.palette.error.contrastText
@@ -73,7 +75,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
       case 'timeout':
         return {
           icon: <WarningIcon />,
-          label: '超時',
+          label: t('proxy.timeout'),
           color: 'warning' as const,
           bgColor: theme.palette.warning.main,
           textColor: theme.palette.warning.contrastText
@@ -81,7 +83,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
       case 'stopped':
         return {
           icon: <StopIcon />,
-          label: '已停止',
+          label: t('proxy.stopped'),
           color: 'default' as const,
           bgColor: theme.palette.grey[500],
           textColor: theme.palette.common.white
@@ -89,7 +91,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
       default:
         return {
           icon: <HelpIcon />,
-          label: '未知',
+          label: t('proxy.unknown'),
           color: 'info' as const,
           bgColor: theme.palette.info.main,
           textColor: theme.palette.info.contrastText
@@ -174,7 +176,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
           <Box display="flex" alignItems="center">
             <RouterIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
             <Typography variant="h6" component="div">
-              代理服務 #{data.proxyid}
+              {t('proxy.service')} #{data.proxyid}
             </Typography>
           </Box>
           <Box display="flex" alignItems="center" gap={1}>
@@ -185,7 +187,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
               size="small"
             />
             {onRefresh && (
-              <Tooltip title="重新整理狀態">
+              <Tooltip title={t('common.refresh')}>
                 <IconButton
                   size="small"
                   onClick={(e) => {
@@ -214,7 +216,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
           <Box display="flex" alignItems="center" mb={1}>
             {statusConfig.icon}
             <Typography variant="body2" sx={{ ml: 1 }}>
-              狀態訊息: {formatMessage(data.message)}
+              {t('proxy.status')}{t('proxy.message')}: {formatMessage(data.message)}
             </Typography>
           </Box>
         </Box>
@@ -224,7 +226,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
           <Grid item xs={12} sm={6}>
             <Box>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                控制器類型
+                {t('proxy.controllerType')}
               </Typography>
               <Typography variant="body1">
                 {data.controller_type || '-'}
@@ -235,7 +237,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
           <Grid item xs={12} sm={6}>
             <Box>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                IP 位址和連接埠
+                {t('proxy.ipAddress')}和{t('proxy.port')}
               </Typography>
               <Typography variant="body1">
                 {data.proxy_ip}:{data.proxy_port}
@@ -246,7 +248,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
           <Grid item xs={12} sm={6}>
             <Box>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                服務運行狀態
+                {t('proxy.serviceRunning')}{t('proxy.status')}
               </Typography>
               <Box display="flex" alignItems="center">
                 <Box
@@ -259,7 +261,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
                   }}
                 />
                 <Typography variant="body2">
-                  {data.proxyServiceAlive === '1' ? '運行中' : '未運行'}
+                  {data.proxyServiceAlive === '1' ? t('proxy.serviceAlive') : t('proxy.serviceNotAlive')}
                 </Typography>
               </Box>
             </Box>
@@ -268,7 +270,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
           <Grid item xs={12} sm={6}>
             <Box>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                服務啟動狀態
+                {t('proxy.serviceStartedLabel')}{t('proxy.status')}
               </Typography>
               <Box display="flex" alignItems="center">
                 <Box
@@ -281,7 +283,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
                   }}
                 />
                 <Typography variant="body2">
-                  {data.proxyServiceStart === '1' ? '已啟動' : '未啟動'}
+                  {data.proxyServiceStart === '1' ? t('proxy.serviceStartedStatus') : t('proxy.serviceNotStartedStatus')}
                 </Typography>
               </Box>
             </Box>
@@ -291,7 +293,7 @@ const ProxyStatusCard: React.FC<ProxyStatusCardProps> = ({
             <Grid item xs={12}>
               <Box>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
-                  備註
+                  {t('proxy.remark')}
                 </Typography>
                 <Typography variant="body2">
                   {data.remark}

@@ -115,7 +115,7 @@ const ProxyStatus: React.FC = () => {
               onClick={handleRefresh}
               startIcon={<RefreshIcon />}
             >
-              重試
+              {t('common.retry')}
             </Button>
           }
           sx={{ mb: 2 }}
@@ -154,7 +154,7 @@ const ProxyStatus: React.FC = () => {
           {/* 資料統計 */}
           <Box display="flex" alignItems="center" gap={1}>
             <Typography variant="body2" color="text.secondary">
-              {t('common.loading')}: {data.length}
+              {t('common.noData')}: {data.length}
             </Typography>
           </Box>
 
@@ -173,7 +173,7 @@ const ProxyStatus: React.FC = () => {
       {/* 最後更新時間 */}
       {lastUpdated && (
         <Typography variant="body2" color="text.secondary" mb={2}>
-          {t('common.loading')}: {lastUpdated.toLocaleString('zh-TW')}
+          {t('common.noData')}: {lastUpdated.toLocaleString('zh-TW')}
         </Typography>
       )}
 
@@ -192,7 +192,7 @@ const ProxyStatus: React.FC = () => {
       {/* 檢視模式切換和結果統計 */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="body2" color="text.secondary">
-          {t('common.loading')} {data.length} {t('common.loading')}
+          {t('common.noData')} {data.length} {t('common.noData')}
         </Typography>
 
         <Box display="flex" alignItems="center" gap={1}>
@@ -202,7 +202,7 @@ const ProxyStatus: React.FC = () => {
             size="small"
             onClick={() => setViewMode('cards')}
           >
-            卡片檢視
+            {t('proxy.cardView')}
           </Button>
           <Button
             startIcon={<ViewModuleIcon />}
@@ -210,7 +210,7 @@ const ProxyStatus: React.FC = () => {
             size="small"
             onClick={() => setViewMode('table')}
           >
-            表格檢視
+            {t('proxy.tableView')}
           </Button>
         </Box>
       </Box>
@@ -248,10 +248,10 @@ const ProxyStatus: React.FC = () => {
             >
               <FilterIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
               <Typography variant="h6" color="text.secondary">
-                {t('common.loading')}
+                {t('common.noData')}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {t('common.loading')}
+                {t('common.noData')}
               </Typography>
             </Box>
           ) : viewMode === 'cards' ? (
@@ -280,17 +280,17 @@ const ProxyStatus: React.FC = () => {
       >
         <SpeedDialAction
           icon={<RefreshIcon />}
-          tooltipTitle="重新整理"
+          tooltipTitle={t('proxy.refreshAll')}
           onClick={() => handleRefresh()}
         />
         <SpeedDialAction
           icon={<FilterIcon />}
-          tooltipTitle="篩選器"
+          tooltipTitle={t('proxy.filters')}
           onClick={() => setFilter({ ...filter, status: filter.status || 'all' })}
         />
         <SpeedDialAction
           icon={<SettingsIcon />}
-          tooltipTitle="設定"
+          tooltipTitle={t('proxy.settings')}
           onClick={() => {
             // 可以開啟設定對話框
           }}
